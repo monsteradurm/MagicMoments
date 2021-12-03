@@ -1,0 +1,167 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <!-- Include Clappr -->
+        <link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/uevent@2/browser.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        
+        <script src="MagicMoments/assets/lib/Detector.js"></script>
+        <script src="MagicMoments/assets/js/three.min.js"></script>
+        <script src="MagicMoments/assets/valiant.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="MagicMoments/assets/css/valiant360.css">
+        <style>
+            #viewer {
+            height: auto;
+            width: calc(100vw - 300px);
+            margin-top:75px !important;
+            margin-left:auto;
+            margin-right:auto;
+            border: solid black 2px;
+            }
+            .fullscreenButton {
+                display:none !important;
+            }
+            /*
+            .valiant-progress-bar {
+                display:none !important;
+            }
+            .timeLabel {
+                display:none !important;
+            }
+            */
+            .navbar-brand {
+                font-size:30px;
+                font-weight:bold;
+                font-family: Delius;
+            }
+            .la-logo {
+                width:250px;
+                height: auto;
+                position:absolute;
+                right: 10px;
+                bottom: 10px;
+                z-index:1000;
+            }
+
+            #the-file-input {
+                font-style: italic;
+                font-weight: normal;
+                opacity: 1;
+            }
+
+            .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+                color: #eee;
+                background-color: transparent !important;
+                border: none !important;
+            }
+
+            .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+                border: none !important;
+            }
+            .nav-tabs .nav-link {
+                border: none !important;
+            }
+
+            a {
+                color: #aaa;
+            }
+
+            a:hover {
+                color: white;
+                text-decoration: none;
+            }
+            .nav-tabs {
+                border-bottom: none !important;
+            }
+
+            h4 {
+                color:#343a40;
+            }
+
+            .form-control:focus {
+                border: solid gray 1px !important;
+                outline: none !important;
+                box-shadow:none !important;
+            }
+
+            .flex-grow {
+                flex: 1 0 auto;
+            }
+        </style>
+    </head> 
+    <body> 
+        
+        <div style="height:10px; top:0px; width:100vw; position:absolute;background:#343a40"></div>
+
+        <div id="viewer" style="position:relative;width:640px;height:360px;" data-video-src="_ReviewURL_"></div> 
+
+        <div style="height:10px; bottom:0px; width:100vw; position:absolute;background:#343a40"></div>
+
+        <script type="text/javascript"> 
+
+            var resolution = { width: 1284, height: 2778 }
+
+            $('#viewer').Valiant360({
+                fov: 35,
+            });
+
+            $(window).resize(function () {
+                    resizeViewer(resolution);
+            })
+
+            $(document).ready(function () {
+                //console.log(ReviewURL);
+                //$('#viewer').attr('data-video-src', ReviewURL);
+                resizeViewer(resolution);
+            });
+
+            var OPTIONS = {
+                    fov: 35,
+                    clickAndDrag: true,
+                    //lat: 45,
+                    //lon: 90,
+                    hideControls: false,
+                    keyboardControls: false
+                }
+            function resizeViewer(res) {
+                if (!res) return;
+
+                $('.valiantContainer').Valiant360('destroy');
+                $('#viewer').empty();
+
+                var selection = $(this).text();
+                var winx =  $(window).width();
+                var winy = $(window).height();
+
+                var aspect = res.width / res.height;
+
+                var height = winy - 170;
+                var width = height * aspect;
+
+                $('#viewer').css("width", width);
+                $('#viewer').css("height", height);
+                $('#viewer').Valiant360(OPTIONS);
+            }
+
+            var STATE = 'PLAY';
+            document.body.onkeyup = function(e){
+                if(e.keyCode == 32){
+                    if (STATE == 'PLAY') {
+                        STATE = 'PAUSED';
+                        $('#viewer').Valiant360('pause');
+                    } else {
+                        STATE = 'PLAY';
+                        $('#viewer').Valiant360('play');
+                    }
+                }
+            }
+
+            resizeViewer(resolution)
+
+        </script> 
+    </body> 
+</html>
